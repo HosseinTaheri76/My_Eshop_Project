@@ -1,0 +1,33 @@
+{% extends 'shared/base_dashboard.html' %}
+{% block profile_content_title%}
+سفارشات من
+{% endblock %}
+{% block profile_content%}
+<div class="table-responsive">
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <td>شماره سفارش</td>
+            <td>تاریخ ثبت</td>
+            <td>وضعیت سفارش</td>
+            <td>مبلغ سفارش</td>
+            <td>جزییات سفارش</td>
+        </tr>
+    </thead>
+    <tbody>
+    {% for order in orders%}
+    <tr>
+        <td>{{ order.order_no }}</td>
+        <td>{{ order.date_paid }}</td>
+        <td>{{ order.status }}</td>
+        <td>{{ order.total_price }}</td>
+        <td><a href="{{ order.get_absolute_url }}">مشاهده</a></td>
+    </tr>
+    {% empty %}
+
+    {% endfor %}
+    </tbody>
+
+</table>
+</div>
+{% endblock %}

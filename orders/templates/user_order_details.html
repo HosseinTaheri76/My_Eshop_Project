@@ -1,0 +1,42 @@
+{% extends 'shared/base_dashboard.html' %}
+{% block profile_content_title %}
+    سفارشات من
+{% endblock %}
+{% block profile_content %}
+    <div class="table-responsive">
+        <table class="table table-bordered text-right">
+            <thead>
+            <tr>
+                <th colspan="2">شرح محصول</th>
+                <th>تعداد</th>
+                <th>قیمت واحد</th>
+                <th colspan="2">قیمت کل</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for item in order.items.all %}
+                <tr>
+                    <td>
+                        <a href="#"><img src="{{ item.product.image.url }}" alt=""
+                                         width="50"></a>
+                    </td>
+                    <td>
+                        <a href="{{ item.product.get_absolute_url }}">{{ item.product.title }}</a>
+                    </td>
+                    <td>
+                        {{ item.qty }}
+                    </td>
+                    <td>{{ item.product.price }}</td>
+                    <td>{{ item.get_sum }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+            <tfoot>
+            <tr>
+                <th colspan="4">قیمت کل</th>
+                <th colspan="2">{{ order.total_price }} تومان</th>
+            </tr>
+            </tfoot>
+        </table>
+    </div>
+{% endblock %}

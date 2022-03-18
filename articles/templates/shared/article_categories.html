@@ -1,0 +1,27 @@
+<section class="box-section border">
+    <header class="right-border">
+        <h3> دسته بندی ها </h3>
+    </header>
+    <ul class="category-menu">
+        {% for category in categories %}
+            <li>
+                <i class="zmdi zmdi-folder-outline"></i><a
+                    href="{{ category.get_absolute_url }}">{{ category.fa_name }}</a>
+                <ul class="child-category-menu">
+                    {% for l1sub_category in category.children.all %}
+                        <li>
+                            <a href="{{ l1sub_category.get_absolute_url }}"> {{ l1sub_category.fa_name }} </a>
+                            <ul>
+                                {% for l2sub_category in l1sub_category.children.all %}
+                                    <li><i class="zmdi zmdi-chevron-left"></i><a
+                                            href="{{ l2sub_category.get_absolute_url }}">{{ l2sub_category.fa_name }}</a>
+                                        <span>({{ l2sub_category.articles.count }})</span></li>
+                                {% endfor %}
+                            </ul>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </li>
+        {% endfor %}
+    </ul>
+</section>

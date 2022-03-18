@@ -1,0 +1,206 @@
+{% extends 'base_layout.html' %}
+{% load static %}
+{% block page_title %}
+    {{ product.title }}
+{% endblock %}
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'css/lightbox.css' %}">
+{% endblock %}
+{% block content %}
+    <section class="mt-20">
+        <div class="container">
+            <div class="row">
+                <main class="col-md-8 col-sm-12 col-xs-12 pull-left">
+                    <section class="box-section border">
+                        <header class="right-border">
+                            <h3>{{ product.title }}</h3>
+                        </header>
+                        <section>
+                            <div class="row">
+                                <div class="col-md-8 col-sm-12 col-xs-12 pull-left product-detail">
+
+                                    <div>
+                                        {% if product.is_available %}
+                                            <span>
+                                                {% if product.is_discounted %}
+                                                    قیمت :
+                                                    <del>{{ product.base_price }}</del>
+                                                    <i class="zmdi zmdi-arrow-left" style="color: green"></i>
+                                                    {{ product.price }}
+                                                     تومان
+                                                {% else %}
+                                                      قیمت : {{ product.price }} تومان
+                                                {% endif %}
+                                            </span>
+                                            <a href="{% url 'add_to_cart' product.id %}" class="add-to-card-link">
+                                                افزودن به سبد خرید </a>
+                                        {% else %}
+                                            <span>ناموجود</span>
+                                        {% endif %}
+                                        {% if show_add_favorite %}
+                                            <form action="{% url 'add_or_remove_favorites' %}" method="post"
+                                                  id="add_favorite">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="action" value="add">
+                                                <input type="hidden" name="product_id" value="{{ product.id }}">
+                                            </form>
+                                            <a href="#" id="add_fav_link" class="add-to-card-link">
+                                                افزودن به علاقه مندی ها </a>
+                                        {% endif %}
+                                        <section class="clearfix"></section>
+                                    </div>
+                                    <div>{{ product.description | safe }}</div>
+                                </div>
+                                <div class="col-md-4 col-sm-12 col-xs-12 pull-right product-gallery">
+
+                                    <div class="large-image">
+                                        <img src="{{ product.image.url }}" alt="{{ product.title }}">
+                                    </div>
+                                    <div class="thumbnails-image">
+                                        <div class="row">
+                                            {% for image in product.images.all %}
+                                                <div class="col-md-3 col-sm-3 col-xs-4"><a href="{{ image.file.url }}"
+                                                                                           data-lightbox="roadtrip"><img
+                                                        src="{{ image.file.url }}" alt=""></a></div>
+                                            {% endfor %}
+                                            <div class="clearfix"></div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </section>
+                    </section>
+                    <section class="tabs-comment mt-20">
+                        <ul class="nav nav-tabs">
+                            <li class="active"><a data-toggle="tab" href="#main-content"> ویژگی های محصول </a></li>
+                            <li><a data-toggle="tab" href="#comments"> نظرات کاربران </a></li>
+                        </ul>
+                        <div class="tab-content ">
+                            <div id="main-content" class="tab-pane fade in active">
+                                <h3> ویژگی های محصول : </h3>
+                                <table class="table table-bordered mt-2">
+                                    <thead class="bg-info text-primary">
+                                    <tr>
+                                        <td>مشخصه</td>
+                                        <td>مقدار</td>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for spec in product.specifications.all %}
+                                        <tr>
+                                            <td>{{ spec.specification.name }}</td>
+                                            <td>{{ spec.value }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!--#endregion-->
+
+                            <!--#region comments-->
+                            <div id="comments" class="tab-pane fade">
+                                {% if request.user.is_authenticated %}
+                                    {% if request.user.has_comment_permission %}
+                                        <form action="{% url 'create_comment' %}" method="post">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="product_id" value="{{ product.id }}">
+                                            <input type="hidden" name="instance" value="product">
+                                            <div class="form-group">
+                                                {{ form.sender_fullname }}
+                                            </div>
+                                            <div class="form-group">
+                                                {{ form.text }}
+                                            </div>
+                                            <input class="btn btn-primary btn-block mt-20 btn-radius"
+                                                   value="ثبت دیدگاه ارزشمند شما" type="submit">
+                                            <div class="clearfix"></div>
+                                        </form>
+                                    {% else %}
+                                        <div class="alert alert-danger">شما اجازه ی نظر دادن ندارید</div>
+                                    {% endif %}
+                                {% else %}
+                                    <div class="alert alert-warning">برای ارسال دیدگاه باید ابتدا وارد شوید</div>
+                                {% endif %}
+                                <div class="comment-list mt-20">
+                                    {% for comment in product.comments.confirmed %}
+                                        <div class="comment-row">
+                                            <img src="{{ comment.sender_avatar }}">
+                                            <div class="left-col">
+                                                <h3>{{ comment.sender_fullname }}</h3>
+                                                <span>{{ comment.date_posted }}</span>
+                                                <p>
+                                                    {{ comment.text }}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    {% empty %}
+                                        <div class="alert alert-info">هیچ نظزی برای این کالا ثبت نشده.</div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <!--#endregion-->
+                        </div>
+                    </section>
+                </main>
+                <aside class="col-md-4 col-sm-12 col-xs-12 pull-right mt-md-20">
+                    <section class="product-info border">
+                        <header class="right-border">
+                            <h3> جزییات محصول </h3>
+                        </header>
+                        <ul>
+                            <li><i class="zmdi zmdi-group"></i> گروه : <a
+                                    href="{{ product.category.get_absolute_url }}">{{ product.category.fa_name }}</a>
+                            </li>
+                            <li><i class="zmdi zmdi-eye"></i> تعداد بازدید : {{ product.times_visited }}</li>
+                            <li><i class="zmdi zmdi-comments"></i> تعداد نظرات : 0</li>
+                            <li><i class="zmdi zmdi-calendar-check"></i> تاریخ انتشار
+                                : {{ product.date_created | date }}</li>
+                            <li><i class="zmdi zmdi-calendar-check"></i> تاریخ بروز رسانی
+                                : {{ product.date_modified | date }}</li>
+                            <li>
+                                <i class="zmdi zmdi-tag"></i> برچسب ها :
+                                <div class="tags">
+                                    <br>
+                                    {% for tag in product.product_tags.all %}
+                                        <a href="{% url 'products_tag' tag.slug %}" title="">{{ tag.name }}</a>
+                                    {% endfor %}
+                                </div>
+                            </li>
+                            <li>
+                                لینک کوتاه:
+                                <span class="short-url">
+                                    <i class="zmdi zmdi-link short-url-copy"></i>
+                                    <span id="short-url-link" title=""> electro.com/b/lY4r </span>
+                                </span>
+                            </li>
+                            <div class="share-layer">
+                                <span> به اشتراک گذاری </span>
+                                <a href="" class="facebook"><i class="zmdi zmdi-facebook"></i></a>
+                                <a href="" class="google"><i class="zmdi zmdi-google"></i></a>
+                                <a href="" class="telegram"><i class="zmdi zmdi-instagram"></i></a>
+                                <a href="" class="linkedin"><i class="zmdi zmdi-linkedin"></i></a>
+                                <section class="clearfix"></section>
+                            </div>
+                        </ul>
+                    </section>
+                </aside>
+            </div>
+        </div>
+    </section>
+
+
+{% endblock %}
+{% block scripts %}
+
+    <script>
+        const add_fav_link = document.getElementById('add_fav_link');
+        if (add_fav_link) {
+            add_fav_link.addEventListener('click', e => {
+                e.preventDefault();
+                document.getElementById('add_favorite').submit();
+            })
+        }
+    </script>
+
+{% endblock %}

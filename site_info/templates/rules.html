@@ -1,0 +1,10 @@
+{% extends 'base_layout.html' %}
+{% block page_title %}
+قوانین سایت
+{% endblock %}
+{% block content %}
+    <section class="container mt-20 box-section border">
+        <h1 class="text-center my-2 big-title">قوانین سایت</h1>
+        {{ site_info.rules_page | safe }}
+    </section>
+{% endblock %}

@@ -1,0 +1,26 @@
+<li class="box-product mt-2">
+    <article>
+        <img src="{{ product.image.url }}" alt="" class="product-image">
+        {% if product.is_discounted %}
+        <span class="product-discount-badge">{{ product.discount_percent }} % تخفیف</span>
+        {% endif %}
+        <h2>
+            <a href="{% url 'product_detail' product.id product.slug %}">{{ product.title }}</a>
+        </h2>
+        <h6><input type="checkbox" class="compare-checkbox"
+                   name="{{ product.id }}:{{ product.root_category }}"
+        ><label for=""> افزودن به
+            لیست مقایسه </label></h6>
+        <section class="detail">
+            <span class="price">
+                {% if product.is_available %}
+                    {{ product.price }} تومان
+                {% else %}
+                    ناموجود
+                {% endif %}
+            </span>
+            <span class="basket"><i class="zmdi zmdi-shopping-basket"></i></span>
+            <section class="clearfix"></section>
+        </section>
+    </article>
+</li>

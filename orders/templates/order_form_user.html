@@ -1,0 +1,54 @@
+{% extends 'base_layout.html' %}
+{% block page_title %}
+فرم سفارش
+{% endblock %}
+{% block content %}
+    <div class="container mt-20">
+        <section class="box-section border account-layer">
+            <header class="right-border">
+                <h3> فرم ثبت سفارش </h3>
+            </header>
+            <div class="form-layer">
+                <form action="" method="post" name="order_form">
+                    {% csrf_token %}
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="zmdi zmdi-smartphone"></i></span>
+                        {{ form.phone }}
+                    </div>
+                    {{ form.errors.phone }}
+                    {{ form.address }}
+                    <input type="hidden" name="" id="method">
+                    <button
+                            type="button"
+                            class="btn btn-danger btn-md btn-block btn-radius mt-2"
+                            id="gateway"
+                    >
+                        پرداخت با درگاه بانکی
+                    </button>
+                    <button
+                            type="button"
+                            class="btn btn-danger btn-md btn-block btn-radius mt-2"
+                            id="pay-credit"
+                    >
+                        پرداخت با اعتبار حساب
+                    </button>
+                </form>
+            </div>
+        </section>
+    </div>
+{% endblock %}
+{% block scripts %}
+    <script>
+        $('#gateway').on('click', function (){
+            $('#method').attr('name', 'gateway');
+            document.forms['order_form'].submit()
+        })
+        $('#pay-credit').on('click', function(){
+            const pay = confirm('پرداخت از اعتبار حساب ؟');
+            if (pay){
+                $('#method').attr('name', 'credit');
+                document.forms['order_form'].submit()
+            }
+        })
+    </script>
+{% endblock %}

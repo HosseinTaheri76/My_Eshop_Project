@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        .rtl{
+            direction: rtl;
+        }
+    </style>
+</head>
+<body>
+
+<p class="rtl">شرکت حسین طاهری</p>
+<h3 class="rtl">سلام {{user.full_name}}</h3>
+<p class="rtl">.لطفا برای فعال سازی حساب کربری خود روی لینک زیر کلیک کنید</p>
+
+http://{{domain}}{% url 'activate' uidb64=uid token=token %}
+
+</body>
+</html>

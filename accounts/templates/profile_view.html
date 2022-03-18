@@ -1,0 +1,17 @@
+{% extends 'shared/base_dashboard.html' %}
+{% block profile_content_title %}
+    داشبورد
+{% endblock %}
+{% block profile_content %}
+    <div class="account-information">
+        <h3> اطلاعات کاربری </h3>
+        <ul>
+            <li><i class="zmdi zmdi-account"></i> نام و نام خانوادگی : {{ request.user.full_name }}
+            </li>
+            <li><i class="zmdi zmdi-email"></i> ایمیل : {{ request.user.email }}</li>
+            <li><i class="zmdi zmdi-calendar"></i> تاریخ عضویت
+                : {{ request.user.date_joined | date }}</li>
+            <li><i class="zmdi zmdi-balance"></i>اعتبار حساب  {{ request.user.balance }} تومان</li>
+        </ul>
+    </div>
+{% endblock %}

@@ -1,0 +1,71 @@
+{% load static %}
+<header>
+    <section class="top-header">
+        <div class="container">
+            <div class="col-md-6 col-sm-6 col-xs-12 text-right">
+                <ul class="header-links">
+                    {% if request.user.is_authenticated %}
+                        <li><a href="{% url 'profile' %}"><i class="zmdi zmdi-account-add"></i> پنل کاربری </a></li>
+                        <li><a href="{% url 'logout' %}"><i class="zmdi zmdi-sign-in"></i> خروج از سایت </a></li>
+                    {% else %}
+                        <li><a href="{% url 'register' %}"><i class="zmdi zmdi-account-add"></i> عضویت </a></li>
+                        <li><a href="{% url 'login' %}"><i class="zmdi zmdi-sign-in"></i> ورود به سایت </a></li>
+                    {% endif %}
+                    <li><a href="{% url 'articles' %}">مقالات</a></li>
+                    <li><a href="{% url 'contact_us' %}">تماس با ما</a></li>
+                </ul>
+            </div>
+            <div class="col-md-6 col-sm-6 col-xs-12 text-left mt-sm-10">
+                <ul class="header-links">
+                    <li><a href=""><i class="zmdi zmdi-phone"></i>{{ site_info.phone }}</a></li>
+                    <li><a href=""><i class="zmdi zmdi-email"></i>{{ site_info.email }}</a></li>
+                </ul>
+            </div>
+        </div>
+    </section>
+    <section class="bottom-header">
+        <div class="container">
+            <div class="col-md-3 col-sm-12">
+                <section class="header-logo">
+                    <a href="{% url 'home' %}" class="logo"><img src="{{ site_info.logo_url }}" alt=""></a>
+                </section>
+            </div>
+            <div class="col-md-6 col-sm-12">
+                <section class="header-search">
+                    <form method="get" action="{% url 'search_redirect' %}">
+                        {{ search_form.category }}
+                        {{ search_form.product_name }}
+                        <button class="search-btn"><i class="zmdi zmdi-search" style="font-size:15px"></i></button>
+                    </form>
+                </section>
+            </div>
+            <div class="col-md-3 col-sm-12 clearfix">
+                <section class="header-ctn">
+
+                    <!--#region wishlist-->
+                    {% if request.user.is_authenticated %}
+                    <section class="wishlist">
+                        <a href="{% url 'favorite_products' %}">
+                            <i class="zmdi zmdi-favorite-outline"></i>
+                            <span> علاقمندیها </span>
+                            <div class="qty">{{ request.user.favorite_products.count }}</div>
+                        </a>
+                    </section>
+                    {% endif %}
+                    <!--#endregion-->
+
+                    <!--#region cart-->
+                    <section class="cart">
+                        <a href="{% url 'cart' %}">
+                            <i class="zmdi zmdi-shopping-cart"></i>
+                            <span>سبد خرید</span>
+                            <div class="qty">{{ number_of_order_items }}</div>
+                        </a>
+                    </section>
+                    <!--#endregion-->
+
+                </section>
+            </div>
+        </div>
+    </section>
+</header>

@@ -1,0 +1,39 @@
+{% extends 'base_layout.html' %}
+{% block page_title %}
+    مقایسه محصولات
+{% endblock %}
+{% block content %}
+    <div class="container mt-20">
+    {% if products %}
+        <section class="box-section border">
+            <header class="right-border">
+                <h3>مقایسه محصولات</h3>
+            </header>
+            <section class="table-responsive">
+                <table class="table table-bordered text-center compare">
+                    <thead>
+                    <tr>
+                        {% for td in products.head %}
+                        <td>{{ td }}</td>
+                        {% endfor %}
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for row in products.body %}
+                    <tr>
+                        {% for td in row %}
+                        <td>{{ td }}</td>
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </section>
+        </section>
+    {% else %}
+        <div class="alert alert-warning">هیچ محصولی برای مقایسه وجود ندارد</div>
+    {% endif %}
+    </div>
+
+
+{% endblock %}

@@ -1,0 +1,61 @@
+{% extends 'shared/base_dashboard.html' %}
+{% block profile_content_title %}
+    محصولات مورد علاقه من
+{% endblock %}
+{% block profile_content %}
+    <div class="table-responsive">
+        <table class="table table-bordered text-right">
+            <thead>
+            <tr>
+                <th colspan="2">شرح محصول</th>
+                <th>قیمت</th>
+                <th colspan="2">موجودی</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for product in request.user.favorite_products.all %}
+                <tr>
+                    <td>
+                        <a href="#"><img src="{{ product.image.url }}" alt=""
+                                         width="50"></a>
+                    </td>
+                    <td>
+                        <a href="{{ product.get_absolute_url }}">{{ product.title }}</a>
+                    </td>
+                    <td>{{ product.price }}</td>
+                    <td>
+                        {% if product.is_available %}
+                            <span class="text-success">موجود</span>
+                        {% else %}
+                            <span class="text-danger">نا موجود</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <form action="{% url 'add_or_remove_favorites' %}" method="post" id="remove_favorite">
+                            {% csrf_token %}
+                            <input type="hidden" name="action" value="remove">
+                            <input type="hidden" name="product_id" value="{{ product.id }}">
+                        </form>
+                        <a href="#" id="remove_fav_link"><i class="zmdi zmdi-delete"></i></a>
+                    </td>
+                </tr>
+            {% empty %}
+                <div class="alert alert-warning">
+                    شما محصولی را پسند نکرده اید
+                </div>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
+{% block scripts %}
+    <script>
+        const remove_fav_link = document.getElementById('remove_fav_link');
+        if (remove_fav_link){
+            remove_fav_link.addEventListener('click', e => {
+                e.preventDefault()
+                document.getElementById('remove_favorite').submit()
+            })
+        }
+    </script>
+{% endblock %}

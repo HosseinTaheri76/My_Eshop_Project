@@ -1,0 +1,85 @@
+{% extends 'base_layout.html' %}
+{% load static %}
+{% block page_title %}
+    سبد خرید
+{% endblock %}
+{% block content %}
+    <section class="mt-20">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="box">
+                        <form action="">
+                            <h1>سبد خرید شما</h1>
+                            <div class="table-responsive">
+                                <table class="table table-bordered text-right">
+                                    <thead>
+                                    <tr>
+                                        <th colspan="2">شرح محصول</th>
+                                        <th>تعداد</th>
+                                        <th>قیمت واحد</th>
+                                        <th colspan="2">قیمت کل</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for item in order.items.all %}
+                                        <tr>
+                                            <td>
+                                                <a href="#"><img src="{{ item.product.image.url }}" alt=""
+                                                                 width="50"></a>
+                                            </td>
+                                            <td>
+                                                <a href="{{ item.product.get_absolute_url }}">{{ item.product.title }}</a>
+                                            </td>
+                                            <td>
+                                                <div class="d-flex p-center">
+                                                    <a class="btn btn-default"
+                                                       href="{% url 'change_order_item' 'add' item.id %}">+</a>
+                                                    <input type="text" class="form-control" disabled
+                                                           value="{{ item.qty }}"
+                                                           style="display: inline; text-align: center">
+                                                    {% if item.qty > 1 %}
+                                                        <a class="btn btn-default"
+                                                           href="{% url 'change_order_item' 'reduce' item.id %}">-</a>
+                                                    {% endif %}
+                                                </div>
+                                            </td>
+                                            <td>{{ item.product.price }}</td>
+                                            <td>{{ item.get_sum }}</td>
+                                            <td><a href="{% url 'change_order_item' 'delete' item.id %}"><i
+                                                    class="zmdi zmdi-delete"></i></a></td>
+                                        </tr>
+                                    {% empty %}
+                                        <div class="alert alert-warning">
+                                            سبد خرید شما خالی است
+                                        </div>
+                                    {% endfor %}
+                                    </tbody>
+                                    <tfoot>
+                                    <tr>
+                                        <th colspan="4">قیمت کل</th>
+                                        <th colspan="2">{{ order.total_price }} تومان</th>
+                                    </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                            <div class="box-footer">
+                                <div class="pull-right"></div>
+                                <div class="pull-left">
+                                    <a
+                                            type="submit"
+                                            class="btn btn-sm btn-block btn-success btn-radius"
+                                            href="{% if not request.user.is_authenticated %}{% url 'register_on_order' %}{% else %}{% url 'user_order_form' %}{% endif %}"
+                                    >&nbsp;پذیرفتن
+                                        و ادامه خرید
+                                    </a>
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

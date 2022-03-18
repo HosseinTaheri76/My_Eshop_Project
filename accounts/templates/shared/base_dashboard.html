@@ -1,0 +1,57 @@
+{% extends 'base_layout.html' %}
+{% block page_title %}{{ request.user.full_name }}{% endblock %}
+{% block content %}
+    <div class="container mt-20">
+        <div class="row">
+
+            <!--#region right-side-->
+
+            <aside class="col-md-4 col-sm-12 col-xs-12 user-account">
+                <div class="avatar-layer">
+                    <div class="img-layer">
+                        <a href="#" class="change-image"><i class="glyphicon glyphicon-edit"></i></a>
+                        <img src="{{ request.user.avatar_url }}" alt="profile-pic">
+                    </div>
+                    <div class="detail">
+                        <span>{{ request.user.full_name }}</span>
+                        <span> عضویت : {{ request.user.date_joined | date }} </span>
+                    </div>
+                </div>
+                <section>
+                    <header>
+                        <h3> میز کار </h3>
+                    </header>
+                    <div class="inner">
+                        <ul>
+                            <li><a href="{% url 'profile' %}"> مشاهده حساب کابری </a></li>
+                            <li><a href="{% url 'edit-profile' %}"> ویرایش حساب کابری </a></li>
+                            <li><a href="{% url 'change_password' %}"> تغییر رمز عبور </a></li>
+                            <li><a href="{% url 'add_balance' %}"> افزایش اعتبار حساب </a></li>
+                            <li><a href="{% url 'user_orders' %}"> سفارشات من </a></li>
+                            <li><a href="{% url 'favorite_products' %}"> علاقه مندی های من </a></li>
+                            <li><a href="{% url 'logout' %}"> خروج از حساب کاربری </a></li>
+                            {% if request.user.is_superuser %}
+                                <li><a href="/admin/">مدیریت سایت</a></li>
+                            {% elif request.user.is_staff %}
+                                <li><a href="/admin/">پنل کارمندی</a></li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                </section>
+            </aside>
+            <!--#endregion-->
+            <!--#region left-side-->
+            <main class="col-md-8 col-sm-12 col-xs-12">
+                <section class="user-account-content">
+                    <header>
+                        <h1>{% block profile_content_title%} {% endblock %}</h1>
+                    </header>
+                    <div class="inner">
+                        {% block profile_content %} {% endblock %}
+                    </div>
+                </section>
+            </main>
+            <!--#endregion-->
+        </div>
+    </div>
+{% endblock %}

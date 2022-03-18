@@ -1,0 +1,12 @@
+{% extends 'shared/base_dashboard.html' %}
+{% block profile_content_title %}
+    افزایش اعتبار حساب
+{% endblock %}
+{% block profile_content %}
+    <form action="" method="post">
+        {% csrf_token %}
+        {{ form.amount }}
+        {{ form.amount.errors }}
+        <button class="btn btn-danger btn-md btn-block btn-radius">پرداخت</button>
+    </form>
+{% endblock %}

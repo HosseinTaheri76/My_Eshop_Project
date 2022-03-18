@@ -1,0 +1,74 @@
+{% extends 'base_layout.html' %}
+{% load render_partial %}
+{% block page_title %}
+    آرشیو مقالات
+{% endblock %}
+{% block content %}
+    <section class="mt-20">
+        <div class="container">
+            <div class="row">
+                <main class="col-md-9 col-sm-12 col-xs-12 pull-left">
+                    <section class="box-section border">
+                        <header class="right-border">
+                            <h3> آرشیو مقالات </h3>
+                        </header>
+                        <ul class="articles" style="padding-top: 10px">
+                            {% for article in articles %}
+                                <li class="article-box">
+                                    <article>
+                                        <img src="{{ article.image.url }}" alt="">
+                                        <h2>
+                                            <a href="{% url 'article_detail' article.id article.slug %}">{{ article.title }}</a>
+                                        </h2>
+
+                                        {{ article.body|safe |truncatewords:15 }}
+
+                                        <div class="detail">
+                                            <a href=""><i class="zmdi zmdi-account"></i>{{ article.author.full_name }}
+                                            </a>
+                                            <span class="comment-pt"><i
+                                                    class="zmdi zmdi-comments"></i>{{ article.comments.confirmed.count }}</span>
+                                            <span><i class="zmdi zmdi-eye"></i>{{ article.view_count }}</span>
+                                            <section class="clearfix"></section>
+                                        </div>
+                                    </article>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </section>
+                    <section class="product-paging mt-20">
+                        <ul id="page-numlist">
+                            <!-- <li><a href="#">&lt;</a></li>
+                             <li><a class="page-active" href="#">1</a></li>
+                             <li><a href="#">2</a></li>
+                             <li><a href="#">3</a></li>
+                             <li><a href="#">4</a></li>
+                             <li><a href="#">5</a></li>
+                             <li><a href="#">&gt;</a></li>-->
+                            {% if page_obj.has_previous %}
+                                <li><a href="?page=1">&laquo;</a></li>
+                                <li><a href="?page={{ page_obj.previous_page_number }}">قبلی</a></li>
+                            {% endif %}
+                            {% for page in paginator.page_range %}
+                                {% if page == page_obj.number %}
+                                    <li><a class="page-active" href="?page={{ page }}">{{ page }}</a></li>
+                                {% elif page > page_obj.number|add:'-3' and page < page_obj.number|add:'3' %}
+                                    <li><a href="?page={{ page }}">{{ page }}</a></li>
+                                {% endif %}
+                            {% endfor %}
+                            {% if page_obj.has_next %}
+                                <li><a href="?page={{ page_obj.next_page_number }}">بعدی</a></li>
+                                <li><a href="?page={{ page_obj.paginator.num_pages }}">&raquo;</a></li>
+                            {% endif %}
+                        </ul>
+                    </section>
+                </main>
+                <aside class="col-md-3 col-sm-12 col-xs-12 pull-right mt-md-20">
+                    <!--#region filter-groups-->
+                    {% render_partial 'articles.views.ArticleCategoryPartialView' %}
+                    <!--#endregion-->
+                </aside>
+            </div>
+        </div>
+    </section>
+{% endblock %}

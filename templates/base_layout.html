@@ -1,0 +1,35 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fa-IR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>{% block page_title %}صفحه اصلی{% endblock %}</title>
+    {% include 'shared/head_assets.html' %}
+    {% block styles %}{% endblock %}
+</head>
+<body>
+<script src="{% static 'js/modernizr.js' %}"></script>
+{% include 'shared/header.html' %}
+{% include 'shared/main_menu.html' %}
+<div class="container" id="message-container">
+    {% include 'shared/messaging.html' %}
+</div>
+{% block content %}{% endblock %}
+{% include 'shared/news_letter.html' %}
+{% include 'shared/footer.html' %}
+{% include 'shared/body_assets.html' %}
+{% block scripts %}{% endblock %}
+<script>
+    setTimeout(function () {
+        const messages = $('.msg-alert');
+        if (messages.length > 0) {
+            messages.remove();
+        }
+    }, 10000)
+</script>
+</body>
+</html>
+

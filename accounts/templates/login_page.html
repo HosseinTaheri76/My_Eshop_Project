@@ -1,0 +1,61 @@
+{% extends 'base_layout.html' %}
+{% block page_title %}
+    ورود به سایت
+{% endblock %}
+{% block content %}
+    <div class="container mt-20">
+        <section class="box-section border account-layer">
+            <header class="right-border">
+                <h3> ورود به سایت </h3>
+            </header>
+            <div class="form-layer">
+                <form action="" method="post">
+                    {% csrf_token %}
+                    <div class="input-group">
+                        <span class="input-group-addon" id="email-address"><i class="zmdi zmdi-email"></i></span>
+                        {{ form.username }}
+                    </div>
+                    {% if 'username' in form.errors %}
+                        {{ form.errors.username }}
+                    {% endif %}
+                    <div class="input-group">
+                        <span class="input-group-addon" id="password"><i class="zmdi zmdi-key"></i></span>
+                        {{ form.password }}
+                    </div>
+                    {% if 'password' in form.errors %}
+                        {{ form.errors.password }}
+                    {% endif %}
+                    <!--<div class="remember-me">
+                        <label><input type="checkbox" name=""> مرا بخاطر بسپار </label>
+                    </div>-->
+                    {{ form.captcha }}
+                    {% if 'captcha' in form.errors %}
+                        {{ form.errors.captcha }}
+                    {% endif %}
+                    {% if form.non_field_errors %}
+                        <ul class="errorlist">
+                            {% for error in form.non_field_errors %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                    <div class="link mt-1">
+                        <a href="{% url 'register' %}"> <i class="fa fa-account"></i> عضویت در سایت </a>
+                    </div>
+                    <div class="dropdown mb-2">
+                        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                            مشکل در ورود به سایت
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu link" aria-labelledby="dropdownMenu1">
+                            <li><a href="{% url 'password_reset' %}"> <i class="fa fa-account"></i> رمز عبور خود را فراموش کرده ام! </a></li>
+                            <li><a href="{% url 'resend_activation' %}"> <i class="fa fa-account"></i> ارسال مجدد لینک فعال سازی. </a></li>
+                        </ul>
+                    </div>
+                    <button class="btn btn-danger btn-md btn-block btn-radius"> ورود به سایت</button>
+                </form>
+            </div>
+        </section>
+    </div>
+{% endblock %}

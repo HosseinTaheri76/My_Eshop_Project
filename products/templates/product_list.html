@@ -1,0 +1,81 @@
+{% extends 'base_layout.html' %}
+{% load static %}
+{% load render_partial %}
+{% block page_title %}
+    لیست محولات
+{% endblock %}
+{% block content %}
+    <section class="mt-20" id="main-content1">
+        <div class="container" id="products-container">
+            <div class="row">
+                <main class="col-md-9 col-sm-12 col-xs-12 pull-left">
+                    <section class="box-section border">
+                        <header class="right-border">
+                            <h3> آرشیو محصولات </h3>
+                        </header>
+                        <ul class="products">
+                            {% for product in products %}
+                                {% include 'shared/product_thumbnail.html' %}
+                            {% endfor %}
+                        </ul>
+                    </section>
+                    <section class="product-paging mt-20">
+                        <ul id="page-numlist">
+                           <!-- <li><a href="#">&lt;</a></li>
+                            <li><a class="page-active" href="#">1</a></li>
+                            <li><a href="#">2</a></li>
+                            <li><a href="#">3</a></li>
+                            <li><a href="#">4</a></li>
+                            <li><a href="#">5</a></li>
+                            <li><a href="#">&gt;</a></li>-->
+                            {% if page_obj.has_previous %}
+                                <li><a href="?page=1">&laquo;</a></li>
+                                <li><a href="?page={{ page_obj.previous_page_number }}">قبلی</a></li>
+                            {% endif %}
+                             {% for page in paginator.page_range %}
+                                {% if page == page_obj.number %}
+                                    <li ><a class="page-active" href="?page={{ page }}">{{ page }}</a></li>
+                                {% elif page > page_obj.number|add:'-3' and page < page_obj.number|add:'3' %}
+                                    <li><a href="?page={{ page }}">{{ page}}</a></li>
+                                {% endif %}
+                            {% endfor %}
+                            {% if page_obj.has_next %}
+                                <li><a href="?page={{ page_obj.next_page_number }}">بعدی</a></li>
+                                <li><a href="?page={{ page_obj.paginator.num_pages  }}">&raquo;</a></li>
+                            {% endif %}
+                        </ul>
+                    </section>
+                </main>
+                <aside class="col-md-3 col-sm-12 col-xs-12 pull-right mt-md-20">
+                    {% render_partial 'products.views.CategoryListView' %}
+                    {% if category.get_specs %}
+                        <form action="" method="GET" id="search-form">
+                            <input type="hidden" name="category_id={{ category.id }}" id="category_id">
+                            {% for attr, values in category.search_fields.items %}
+                                <section class="box-section border mt-20">
+                                    <header class="right-border">
+                                        <h3>{{ attr }}</h3>
+                                    </header>
+                                    <ul class="filter-groups">
+                                        {% for value in values %}
+                                            <li>
+                                                <input type="checkbox" name="attr{{ attr.id }}-{{ value.id }}"
+                                                       class="filter-checkbox">
+                                                <label for="">{{ value.value }}</label>
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+                                </section>
+                            {% endfor %}
+                            <button class="btn btn-primary mt-20" type="submit">اعمال فیلتر</button>
+                        </form>
+                    {% endif %}
+                </aside>
+
+            </div>
+        </div>
+    </section>
+{% endblock %}
+{% block scripts %}
+    <script src="{% static 'js/product_search.js' %}"></script>
+{% endblock %}

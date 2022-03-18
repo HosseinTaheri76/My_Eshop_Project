@@ -1,0 +1,147 @@
+{% extends 'base_layout.html' %}
+{% load static %}
+{% block page_title %}
+    صفحه اصلی
+{% endblock %}
+{% block content %}
+    <!--#region categories-->
+
+    <section class="section">
+        <div class="container">
+            {% for collection in collections %}
+                <div class="col-md-4 col-sm-6 col-xs-12">
+                    <section class="shop">
+                        <section class="shop-img"><img src="{{ collection.cover_image.url }}" alt=""></section>
+                        <section class="shop-body">
+                            <h3>{{ collection.name }}</h3>
+                            <a href="{{ collection.get_absolute_url }}" class="text-white"><i
+                                    class="ml-5 zmdi zmdi-square-right"></i>show details</a>
+                        </section>
+                    </section>
+                </div>
+            {% endfor %}
+            <!--<div class="col-md-4 col-sm-6 col-xs-12">
+                <section class="shop">
+                    <section class="shop-img"><img src="images/shop02.png" alt=""></section>
+                    <section class="shop-body">
+                        <h3>Cameras<br>Collection</h3>
+                        <a href="#" class="text-white"><i class="ml-5 zmdi zmdi-square-right"></i>show details</a>
+                    </section>
+                </section>
+            </div>
+            <div class="col-md-4 col-sm-6 col-xs-12 hide-section">
+                <section class="shop">
+                    <section class="shop-img"><img src="images/shop03.png" alt=""></section>
+                    <section class="shop-body">
+                        <h3>Accessories<br>Collection</h3>
+                        <a href="#" class="text-white"><i class="ml-5 zmdi zmdi-square-right"></i>show details</a>
+                    </section>
+                </section>
+            </div>-->
+        </div>
+    </section>
+
+    <!--#endregion -->
+
+    <!--#region new-products-->
+
+    <section class="section">
+        <div class="container">
+            <div class="col-md-12">
+                <section class="box-section border">
+                    <header class="right-border">
+                        <h3>جدیدترین محصولات</h3>
+                        <a class="more" href="">آرشیو محصولات<i class="zmdi zmdi-more"></i></a>
+                        <section class="clearfix"></section>
+                    </header>
+                    <section class="inner">
+                        <div class="row">
+                            <div class="products-slick" data-nav="#slick-nav-2">
+                                {% for product in newest_products %}
+                                    <!--#region product-->
+                                    {% include 'shared/index_product_thumbnail.html' %}
+                                    <!--#endregion-->
+                                {% endfor %}
+
+
+                            </div>
+                        </div>
+                    </section>
+                </section>
+            </div>
+        </div>
+    </section>
+
+    <!--#endregion-->
+
+    <!--#region top-selling-->
+
+    <section class="section">
+        <div class="container">
+            <div class="col-md-12">
+                <section class="box-section border">
+                    <header class="right-border">
+                        <h3>محصولات پرفروش</h3>
+                        <a class="more" href="">آرشیو محصولات<i class="zmdi zmdi-more"></i></a>
+                        <section class="clearfix"></section>
+                    </header>
+                    <section class="inner">
+                        <div class="row">
+                            <div class="products-slick" data-nav="#slick-nav-2">
+                                {% for product in most_sold %}
+                                    <!--#region product-->
+                                    {% include 'shared/index_product_thumbnail.html' %}
+                                    <!--#endregion-->
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </section>
+                </section>
+            </div>
+        </div>
+    </section>
+
+    <!--#endregion-->
+
+    <!--#region recent-articles-->
+
+    <section class="section">
+        <div class="container">
+            <div class="col-md-12">
+                <section class="box-section border">
+                    <header class="right-border">
+                        <h3> جدیدترین مقالات سایت </h3>
+                        <a class="more" href="{% url 'articles' %}">آرشیو مقالات<i class="zmdi zmdi-more"></i></a>
+                        <section class="clearfix"></section>
+                    </header>
+                    <section class="inner">
+                        <div class="row">
+                            {% for article in articles %}
+                                <div class="col-md-3 col-sm-6 article-box">
+                                    <article>
+                                        <img src="{{ article.image.url }}" alt="">
+                                        <h2>
+                                            <a href="{% url 'article_detail' article.id article.slug %}">{{ article.title }}</a>
+                                        </h2>
+                                        {{ article.body|safe |truncatewords:15 }}
+                                        <div class="detail">
+                                            <a href=""><i class="zmdi zmdi-account"></i>{{ article.author.full_name }}
+                                            </a>
+                                            <span class="comment-pt"><i
+                                                    class="zmdi zmdi-comments"></i>{{ article.comments.confirmed.count }}</span>
+                                            <span><i class="zmdi zmdi-eye"></i>{{ article.view_count }}</span>
+                                            <section class="clearfix"></section>
+                                        </div>
+                                    </article>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </section>
+                </section>
+            </div>
+        </div>
+    </section>
+
+    <!--#endregion-->
+
+{% endblock %}

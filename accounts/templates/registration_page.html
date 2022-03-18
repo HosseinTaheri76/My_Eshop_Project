@@ -1,0 +1,60 @@
+{% extends 'base_layout.html' %}
+{% block page_title %}
+    عضویت در سایت
+{% endblock %}
+{% block content %}
+    <div class="container mt-20">
+        <section class="box-section border account-layer">
+            <header class="right-border">
+                <h3> عضویت در سایت </h3>
+            </header>
+            <div class="form-layer">
+                <form action="" method="post">
+                    {% csrf_token %}
+                    <div class="input-group">
+                        <span class="input-group-addon" id="username"><i class="zmdi zmdi-account"></i></span>
+                        {{ form.full_name }}
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-addon" id="email-address"><i class="zmdi zmdi-email"></i></span>
+                        {{ form.email }}
+                    </div>
+                    {% if 'email' in form.errors %}
+                        {{ form.errors.email }}
+                    {% endif %}
+                    <div class="input-group">
+                        <span class="input-group-addon" id="password"><i class="zmdi zmdi-key"></i></span>
+                        {{ form.password1 }}
+                    </div>
+                    {% if 'password1' in form.errors %}
+                        {{ form.errors.password1 }}
+                    {% endif %}
+                    {{ form.password1.help_text }}
+                    <div class="input-group">
+                        <span class="input-group-addon" id="password"><i class="zmdi zmdi-key"></i></span>
+                        {{ form.password2 }}
+                    </div>
+                    {{ form.password2.help_text }}
+                    {% if 'password2' in form.errors %}
+                        {{ form.errors.password2 }}
+                    {% endif %}
+                    <div class="remember-me">
+                        <label>{{ form.rules }} قوانین و مقررات سایت را می پذیرم ! </label>
+                    </div>
+                    {% if 'rules' in form.errors %}
+                        {{ form.errors.rules }}
+                    {% endif %}
+                    {{ form.captcha }}
+                    {% if 'captcha' in form.errors %}
+                        {{ form.errors.captcha }}
+                    {% endif %}
+                    <div class="link">
+                        <a href="{% url 'rules' %}" target="_blank"> <i class="zmdi zmdi-more"></i> قوانین و مقررات سایت !</a>
+                        <a href="{% url 'login' %}"> <i class="zmdi zmdi-sign-in"></i> ورود به سایت </a>
+                    </div>
+                    <button class="btn btn-danger btn-md btn-block btn-radius"> عضویت در سایت</button>
+                </form>
+            </div>
+        </section>
+    </div>
+{% endblock %}

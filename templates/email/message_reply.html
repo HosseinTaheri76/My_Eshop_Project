@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="fa-ir">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h2>{{ site_info.name }}</h2>
+<p> عزیز سلام.{{ full_name }}</p>
+<p>پاسخ کارشناس به پیام شما با عنوان</p>
+<p>{{ title }}</p>
+<p>به شرح زیر است : </p>
+<div>
+    {{ answer | safe }}
+</div>
+<p></p>
+</body>
+</html>

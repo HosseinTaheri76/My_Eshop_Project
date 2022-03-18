@@ -1,0 +1,111 @@
+{% extends 'base_layout.html' %}
+{% block page_title %}
+    {{ article.title }}
+{% endblock %}
+{% block content %}
+    <div class="container mt-20">
+        <div class="row">
+            <main class="col-md-8 col-sm-12 col-xs-12 pull-left">
+                <section class="single-news border">
+                    <header>
+                        <h3><a href="">{{ article.title }}</a></h3>
+                        <span> <i class="zmdi zmdi-calendar"></i> تاریخ انتشار :{{ article.date_published }}</span>
+                    </header>
+                    <article>
+                        {{ article.body | safe }}
+                    </article>
+                </section>
+                <section class="tabs-comment mt-20">
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a data-toggle="tab" href="#main-content"> نظر دهید ! </a></li>
+                        <li><a data-toggle="tab" href="#comments"> نظرات کاربران </a></li>
+                    </ul>
+                    <div class="tab-content ">
+
+                        <!--#region form-comment-->
+                        <div id="main-content" class="tab-pane fade in active">
+                            {% if request.user.is_authenticated %}
+                                {% if request.user.has_comment_permission %}
+                                    <form action="{% url 'create_comment' %}" method="post">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="article_id" value="{{ article.id }}">
+                                        <input type="hidden" name="instance" value="article">
+                                        <div class="col-md-5">
+                                            <div class="form-group">
+                                                {{ form.sender_fullname }}
+                                            </div>
+                                        </div>
+                                        <div class="col-md-7">
+                                            {{ form.text }}
+                                            <input class="btn btn-primary btn-block mt-20 btn-radius"
+                                                   value="ثبت دیدگاه ارزشمند شما" type="submit">
+                                        </div>
+                                        <div class="clearfix"></div>
+                                    </form>
+                                {% else %}
+                                    <div class="alert alert-danger">شما اجازه ی نظر دادن ندارید</div>
+                                {% endif %}
+                            {% else %}
+                                <div class="alert alert-warning">برای ارسال دیدگاه باید ابتدا وارد شوید</div>
+                            {% endif %}
+                        </div>
+                        <!--#endregion-->
+
+                        <!--#region comments-->
+                        <div id="comments" class="tab-pane fade">
+                            <div class="comment-list">
+                                {% for comment in article.comments.confirmed %}
+                                <div class="comment-row">
+                                    <img src="{{ comment.sender_avatar }}">
+                                    <div class="left-col">
+                                        <h3>{{ comment.sender_fullname }}</h3>
+                                        <span>{{ comment.date_posted }}</span>
+                                        <p>
+                                           {{ comment.text }}
+                                        </p>
+                                    </div>
+                                </div>
+                                {% empty %}
+                                    <div class="alert alert-info">هیچ نظزی برای این کالا ثبت نشده.</div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <!--#endregion-->
+                    </div>
+                </section>
+            </main>
+            <aside class="col-md-4 col-sm-12 col-xs-12 pull-right mt-md-20">
+                <section class="aside-box authore-info">
+                    <a class="img-avatar" href=""><img src="{{ article.author.avatar_url }}" alt=""></a>
+                    <div class="detail">
+                        <span> نویسنده : {{ article.author.full_name }} </span>
+                        <span> تاریخ عضویت : {{ article.author.date_joined | date }} </span>
+                    </div>
+                </section>
+                <section class="article-info border">
+                    <header class="right-border">
+                        <h3> اطلاعات این مقاله </h3>
+                    </header>
+                    <ul>
+                        <li><i class="zmdi zmdi-group"></i> گروه : <a
+                                href="{{ article.category.get_absolute_url }}">{{ article.category.fa_name }}</a></li>
+                        <li><i class="zmdi zmdi-calendar-check"></i> تاریخ انتشار : {{ article.date_published }}</li>
+                        {% if article.tags.count %}
+                            <li>
+                                <i class="zmdi zmdi-tag"></i> برچسب ها :
+                                <div class="tags">
+                                    <br>
+                                    {% for tag in article.tags.all %}
+                                        <a href="{% url 'articles_by_tag' tag.slug %}" title="">{{ tag.name }}</a>
+                                    {% endfor %}
+                                </div>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </section>
+            </aside>
+        </div>
+    </div>
+
+
+{% endblock %}

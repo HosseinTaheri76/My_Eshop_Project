@@ -1,0 +1,10 @@
+{% extends 'base_layout.html' %}
+{% block page_title %}
+درباره ی ما
+{% endblock %}
+{% block content %}
+    <section class="container mt-20 box-section border">
+        <h1 class="text-center my-2 big-title">درباره ی ما</h1>
+        {{ site_info.full_about | safe }}
+    </section>
+{% endblock %}

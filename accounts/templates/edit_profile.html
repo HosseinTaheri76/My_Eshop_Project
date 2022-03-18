@@ -1,0 +1,32 @@
+{% extends 'shared/base_dashboard.html' %}
+{% block profile_content_title%}
+    ویرایش حساب کابری
+{% endblock %}
+{% block styles %}
+    <style>
+        textarea{
+            resize: none;
+        }
+    </style>
+{% endblock %}
+{% block profile_content%}
+    <form action="" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="mb-2">
+            <label for="{{ form.avatar.id_for_label }}">{{ form.avatar.label }}</label>
+            {{ form.avatar }}
+        </div>
+        {{ form.errors.avatar }}
+        <div class="mb-2">
+             <label for="{{ form.phone.id_for_label }}">{{ form.phone.label }}:</label>
+            {{ form.phone }}
+        </div>
+        {{ form.errors.phone }}
+        <div class="mb-2">
+             <label for="{{ form.address.id_for_label }}">{{ form.address.label }}:</label>
+            {{ form.address }}
+        </div>
+        {{ from.errors.address }}
+        <button class="btn btn-danger btn-md btn-block btn-radius mt-2">ذخیره</button>
+    </form>
+{% endblock %}
